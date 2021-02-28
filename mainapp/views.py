@@ -35,9 +35,9 @@ def products(request):
             {'name': 'Подарки'},
         ],
         'carousel': [
-            {'name': 'First slide', 'way': " {'static/vendor/img/slides/slide-1.jpg'}", 'starter': True},
-            {'name': 'Second slide', 'way': " {'static/vendor/img/slides/slide-2.jpg'}"},
-            {'name': 'Third slide', 'way': "{'static/vendor/img/slides/slide-3.jpg'}"},
+            {'name': 'First slide', 'way': 'slide-1.jpg', 'starter': True},
+            {'name': 'Second slide', 'way': 'slide-2.jpg'},
+            {'name': 'Third slide', 'way': 'slide-3.jpg'},
         ],
         'product': CildrenProducts()
 
