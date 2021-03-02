@@ -77,12 +77,18 @@
                                     <h4 class="card-title">
                                         <a href="#">{{ i.name }}</a>
                                     </h4>
-                                    <h5>{{ i.price }}</h5>
+                                    <h5>{{ i.price }} .руб </h5>
                                     <p class="card-text">{{ i.info }}</p>
                                 </div>
+                                {% if i.status == 'Отправить в корзину' %}
                                 <div class="card-footer text-center">
                                     <button type="button" class="btn btn-outline-success">{{ i.status }}</button>
                                 </div>
+                                {% else %}
+                               <div class="card-footer text-center">
+                                    <button type="button" class="btn btn-outline-danger">{{ i.status }}</button>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
