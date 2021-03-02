@@ -2,6 +2,8 @@ from django.shortcuts import render
 import json
 import os
 
+from mainapp.models import  ProductCategory,Product
+
 # функцияя = вьюхи = контролеры.
 def index(request):
     context = {
@@ -35,13 +37,13 @@ def products(request):
         'title': 'GeeKshop',
         'header': 'Каталог',
         'username': 'Иванов Иван',
-        'menu': CildrenCategory(),
+        'menu': ProductCategory.objects.all(),
         'carousel': [
             {'name': 'First slide', 'way': 'slide-1.jpg', 'starter': True},
             {'name': 'Second slide', 'way': 'slide-2.jpg'},
             {'name': 'Third slide', 'way': 'slide-3.jpg'},
         ],
-        'product': CildrenProducts()
+        'product': Product.objects.all()
 
     }
     return render(request, 'mainapp/products.html', context)
@@ -59,14 +61,3 @@ def test_context(request):
         ]
     }
     return render(request, 'mainapp/test-context.html', context)
-
-
-# category = ProductCategory(name='Одежда',description='Новая одежда')
-# category.save()
-#
- # ProductCategory.objects.create(name='Одежда',description='Новая одежда')
-
-# a = ProductCategory.objects.get(id(1))
-# a.name
-# cat = ProductCategory.objects.filter(name='Одежда') возвращает QuerySEt лист
-# catall = ProductCategory.objects.all();
