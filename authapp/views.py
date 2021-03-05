@@ -32,7 +32,7 @@ def register(request):
             form.save()
             return HttpResponsePermanentRedirect(reverse('auth:login'))
     else:
-        form = UserRegisterForm()
+        form = UserRegisterForm
     context = {
         'title': 'GeekShop - Регистрация',
         'form': form,
