@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponsePermanentRedirect
 from django.contrib import auth,messages
 from django.urls import reverse
-from authapp.forms import  UserCreationForm,UserLoginForm
+from authapp.forms import  UserRegisterForm,UserLoginForm
 
 from authapp.models import  User
 
@@ -26,7 +26,20 @@ def login(request):
     return render(request, 'authapp/login.html', context)
 
 def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponsePermanentRedirect(reverse('auth:login'))
+    else:
+        form = UserRegisterForm()
     context = {
         'title': 'GeekShop - Регистрация',
+        'form': form,
     }
     return render(request, 'authapp/register.html', context)
+
+
+def logout(requst):
+    auth.logout(requst)
+    return HttpResponsePermanentRedirect(reverse('index'))
