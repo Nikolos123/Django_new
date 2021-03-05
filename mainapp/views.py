@@ -31,7 +31,7 @@ def CildrenCategory():
     # for i in a
     return a
 
-def products(request):
+def products(request,id=None):
 
     context = {
         'title': 'GeeKshop',
