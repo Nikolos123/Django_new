@@ -18,7 +18,7 @@ def login(request):
                 auth.login(request,user)
                 return HttpResponsePermanentRedirect(reverse('index'))
     else:
-        form = UserLoginForm
+        form = UserLoginForm()
     context = {
             'title': 'GeekShop - Авторизация',
             'form': form,
@@ -32,7 +32,7 @@ def register(request):
             form.save()
             return HttpResponsePermanentRedirect(reverse('auth:login'))
     else:
-        form = UserRegisterForm
+        form = UserRegisterForm()
     context = {
         'title': 'GeekShop - Регистрация',
         'form': form,
