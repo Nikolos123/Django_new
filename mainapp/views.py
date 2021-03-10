@@ -49,15 +49,4 @@ def products(request,id=None):
     return render(request, 'mainapp/products.html', context)
 
 
-def test_context(request):
-    context = {
-        'title': 'geekshop',
-        'header': 'Добро пожаловать',
-        'username': 'Иванов Иван',
-        'product': [
-            {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '6 500', 'promotion': True},
-            {'name': 'Синяя куртка The North Face', 'price': '13 500'},
-            {'name': 'Коричневый спортивный oversized-топ ASOS DESIGN', 'price': '32 500'},
-        ]
-    }
-    return render(request, 'mainapp/test-context.html', context)
+#
