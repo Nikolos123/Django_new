@@ -42,7 +42,7 @@
                         <a class="nav-link" href="{% url 'auth:profile' %}">{{ user.first_name }} <i class="fas fa-user-circle"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auth:logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a>
+                        <a class="nav-link" href="{% url 'auth:new_logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a>
                     </li>
                 {% else %}
                     <li class="nav-item">
