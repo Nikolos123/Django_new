@@ -47,6 +47,9 @@ def new_logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
+
+
+
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
@@ -58,6 +61,6 @@ def profile(request):
 
     context = {
         'title': 'GeekShop - Профиль',
-        'form': form,
-        'baskets': Basket.objects.filter(user= request.user)}
+        # 'form': form,
+        'baskets': Basket.objects.filter(user= request.user),}
     return render(request, 'authapp/profile.html', context)
