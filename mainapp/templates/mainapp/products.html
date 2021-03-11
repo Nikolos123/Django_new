@@ -70,19 +70,26 @@
                             <div class="card h-100">
                                 <a href="#">
                                     <img class="card-img-top"
-                                         src="{% static 'vendor/img/products/'|add:i.way %}"
+                                           src="/media/{{ i.image }}"
+{#                                         src="{% static 'vendor/img/products/'|add:i.way %}"#}
                                          alt="">
                                 </a>
                                 <div class="card-body">
                                     <h4 class="card-title">
                                         <a href="#">{{ i.name }}</a>
                                     </h4>
-                                    <h5>{{ i.price }}</h5>
-                                    <p class="card-text">{{ i.info }}</p>
+                                    <h5>{{ i.price }} руб </h5>
+                                    <p class="card-text">{{ i.short_description }}</p>
                                 </div>
+                                {% if i.status_buy == 'Отправить в корзину' %}
                                 <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-outline-success">{{ i.status }}</button>
+                                    <button type="button" class="btn btn-outline-success">{{ i.status_buy }}</button>
                                 </div>
+                                {% else %}
+                               <div class="card-footer text-center">
+                                    <button type="button" class="btn btn-outline-danger">{{ i.status_buy }}</button>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}

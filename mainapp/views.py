@@ -2,6 +2,7 @@ from django.shortcuts import render
 import json
 import os
 
+from mainapp.models import  ProductCategory,Product
 
 # функцияя = вьюхи = контролеры.
 def index(request):
@@ -19,7 +20,16 @@ def CildrenProducts():
     with open( c,'r',encoding='utf8') as json_file:
         return json.load(json_file)
 
-
+def CildrenCategory():
+    a = [
+        {'name': 'Новинки','description':'Новая одежда'},
+        {'name': 'Одежда','description':'Новая одежда'},
+        {'name': 'Обувь','description':'Новая одежда'},
+        {'name': 'Аксессуары','description':'Новая одежда'},
+        {'name': 'Подарки','description':'Новая одежда'},
+    ]
+    # for i in a
+    return a
 
 def products(request):
 
@@ -27,19 +37,13 @@ def products(request):
         'title': 'GeeKshop',
         'header': 'Каталог',
         'username': 'Иванов Иван',
-        'menu': [
-            {'name': 'Новинки'},
-            {'name': 'Одежда'},
-            {'name': 'Обувь'},
-            {'name': 'Аксессуары'},
-            {'name': 'Подарки'},
-        ],
+        'menu': ProductCategory.objects.all(),
         'carousel': [
             {'name': 'First slide', 'way': 'slide-1.jpg', 'starter': True},
             {'name': 'Second slide', 'way': 'slide-2.jpg'},
             {'name': 'Third slide', 'way': 'slide-3.jpg'},
         ],
-        'product': CildrenProducts()
+        'product': Product.objects.all()
 
     }
     return render(request, 'mainapp/products.html', context)
