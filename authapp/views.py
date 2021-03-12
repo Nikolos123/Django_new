@@ -5,6 +5,7 @@ from authapp.forms import UserRegisterForm, UserLoginForm, UserProfileForm
 from django.contrib import messages
 from authapp.models import User
 from basketapp.models import Basket
+from django.contrib.auth.decorators import login_required
 
 # функцияя = вьюхи = контролеры.
 def login(request):
@@ -49,7 +50,7 @@ def new_logout(request):
 
 
 
-
+@login_required
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
