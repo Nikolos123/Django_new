@@ -81,15 +81,11 @@
                                     <h5>{{ i.price }} руб </h5>
                                     <p class="card-text">{{ i.short_description }}</p>
                                 </div>
-                                {% if i.status_buy == 'Отправить в корзину' %}
+{#                                {% if i.status_buy == 'Отправить в корзину' %}#}
                                 <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-outline-success">{{ i.status_buy }}</button>
+                                    <a href="{% url 'baskets:basket_add' i.id %}">
+                                        <button type="button" class="btn btn-outline-success">Отправить в корзину</button></a>
                                 </div>
-                                {% else %}
-                               <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-outline-danger">{{ i.status_buy }}</button>
-                                </div>
-                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
