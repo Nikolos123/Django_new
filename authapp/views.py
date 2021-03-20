@@ -61,6 +61,7 @@ def profile(request):
         form = UserProfileForm(instance=request.user)
 
     context = {
+        'form':form,
         'title': 'GeekShop - Профиль',
         'baskets': Basket.objects.filter(user= request.user),}
     return render(request, 'authapp/profile.html', context)
