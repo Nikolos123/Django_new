@@ -22,6 +22,8 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)  # PROTECT
     status_buy = models.CharField(max_length=64, default='Отправить в корзину')
 
-
+    #
+    # def __str__(self):
+    #     return f'{self.name} | {self.category.name}'
     def __str__(self):
-        return f'{self.name} | {self.category.name}'
+        return self.name
