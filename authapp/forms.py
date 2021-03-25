@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 from authapp.models import User
@@ -16,6 +18,10 @@ class UserLoginForm(AuthenticationForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
 
+def hashlib():
+    pass
+
+
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
@@ -32,6 +38,11 @@ class UserRegisterForm(UserCreationForm):
         for fild_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
+    # def save(self):
+    #     user = super().save()
+    #
+    #     user.is_active = False
+    #     salt = hashlib.sha1(str(random.random))
 
 class UserProfileForm(UserChangeForm):
     avatar =forms.ImageField(widget=forms.FileInput,required=False)

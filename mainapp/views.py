@@ -1,6 +1,5 @@
 from django.shortcuts import render
-import json
-import os
+from django.core.paginator import Paginator
 
 from mainapp.models import  ProductCategory,Product
 
@@ -14,24 +13,7 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def CildrenProducts():
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    c = os.path.join(BASE_DIR,'mainapp/fixtures/products.json')
-    with open( c,'r',encoding='utf8') as json_file:
-        return json.load(json_file)
-
-def CildrenCategory():
-    a = [
-        {'name': 'Новинки','description':'Новая одежда'},
-        {'name': 'Одежда','description':'Новая одежда'},
-        {'name': 'Обувь','description':'Новая одежда'},
-        {'name': 'Аксессуары','description':'Новая одежда'},
-        {'name': 'Подарки','description':'Новая одежда'},
-    ]
-    # for i in a
-    return a
-
-def products(request,id=None):
+def products(request,category_id=None,page=1):
 
     context = {
         'title': 'GeeKshop',
@@ -43,9 +25,16 @@ def products(request,id=None):
             {'name': 'Second slide', 'way': 'slide-2.jpg'},
             {'name': 'Third slide', 'way': 'slide-3.jpg'},
         ],
-        'product': Product.objects.all()
+        # 'product': Product.objects.all()
 
     }
+    if category_id:
+        product = Product.objects.filter(category_id = category_id).order_by('name')
+    else:
+        product = Product.objects.all().order_by('name')
+    paginator = Paginator(product, 3)
+    products_paginator = paginator.page(page)
+    context.update({'product':products_paginator})
     return render(request, 'mainapp/products.html', context)
 
 
