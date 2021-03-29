@@ -23,7 +23,7 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
-
+        User._meta.get_field('email')._unique = True
     def __init__(self, *args, **kwargs):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['placeholder'] = 'Введите имя пользователя'
@@ -35,11 +35,12 @@ class UserRegisterForm(UserCreationForm):
         for fild_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
+
     def save(self):
         user = super().save()
         user.is_active = False
         salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
-        user.activation_key = hashlib.sha1((user.email+salt).encode('utf8')).hexdigest()
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
         user.save()
         return user
 
