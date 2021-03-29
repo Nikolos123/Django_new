@@ -127,7 +127,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 AUTH_USER_MODEL = 'authapp.User'
 LOGIN_URL = '/auth/login/'
 
-# DOMAIN_NAME = 'http://localhost:8000'
+DOMAIN_NAME = 'http://localhost:8000'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
