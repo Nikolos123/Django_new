@@ -1,6 +1,6 @@
 window.onload = function () {
     $('.basket_list').on('click', 'input[type="number"]', function () {
-        const t_href = Event.target;
+        let t_href = event.target;
         // console.log(t_href.name); // name - basket.id
         // console.log(t_href.value); // значение
 

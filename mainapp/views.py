@@ -18,7 +18,6 @@ def products(request,category_id=None,page=1):
     context = {
         'title': 'GeeKshop',
         'header': 'Каталог',
-        'username': 'Иванов Иван',
         'menu': ProductCategory.objects.all(),
         'carousel': [
             {'name': 'First slide', 'way': 'slide-1.jpg', 'starter': True},
@@ -29,10 +28,10 @@ def products(request,category_id=None,page=1):
 
     }
     if category_id:
-        product = Product.objects.filter(category_id = category_id).order_by('name')
+        products = Product.objects.filter(category_id = category_id).order_by('name')
     else:
-        product = Product.objects.all().order_by('name')
-    paginator = Paginator(product, 3)
+        products = Product.objects.all().order_by('name')
+    paginator = Paginator(products, per_page=3)
     products_paginator = paginator.page(page)
     context.update({'product':products_paginator})
     return render(request, 'mainapp/products.html', context)

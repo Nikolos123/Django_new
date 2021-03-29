@@ -1,9 +1,8 @@
-
 from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse,reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from authapp.models import User
 from adminapp.forms import UserAdminRegistrationForm, UserAdminProfileForim
@@ -12,25 +11,28 @@ from adminapp.forms import UserAdminRegistrationForm, UserAdminProfileForim
 # FBV  = Function-Based-Views
 # CBC  = Class-Based-Views
 
-@user_passes_test(lambda u: u.is_superuser,login_url='/')
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def index(request):
-    return render(request, 'index.html')
+    context = {
+        'title': 'GeekShop - Административная панель', }
+    return render(request, 'index.html', context)
 
 
 # READ
 class UserListView(ListView):
     model = User
     template_name = 'admin-users-read.html'
+
     # queryset = User.objects.filter(is_active=True)
 
     def get_context_data(self, **kwargs):
-        context = super(UserCreateView,self).get_context_data(**kwargs)
+        context = super(UserListView, self).get_context_data(**kwargs)
         context['title'] = 'GeekShop - Пользователи'
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
     def dispatch(self, request, *args, **kwargs):
-        return  super(UserListView, self).dispatch(request, *args, **kwargs)
+        return super(UserListView, self).dispatch(request, *args, **kwargs)
 
 
 # @user_passes_test(lambda u: u.is_superuser,login_url='/')
@@ -48,14 +50,13 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('admin_staff:admin_users')
 
     def get_context_data(self, **kwargs):
-        context = super(UserCreateView,self).get_context_data(**kwargs)
+        context = super(UserCreateView, self).get_context_data(**kwargs)
         context['title'] = 'GeekShop - Создание пользователя'
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
     def dispatch(self, request, *args, **kwargs):
-        return  super(UserCreateView, self).dispatch(request, *args, **kwargs)
-
+        return super(UserCreateView, self).dispatch(request, *args, **kwargs)
 
 
 # @user_passes_test(lambda u: u.is_superuser,login_url='/')
@@ -84,14 +85,14 @@ class UserUpdateView(UpdateView):
     success_url = reverse_lazy('admin_staff:admin_users')
 
     def get_context_data(self, **kwargs):
-        context = super(UserUpdateView,self).get_context_data(**kwargs)
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'GeekShop - Редактирование пользователя'
         return context
 
-
     @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
     def dispatch(self, request, *args, **kwargs):
-        return  super(UserUpdateView, self).dispatch(request, *args, **kwargs)
+        return super(UserUpdateView, self).dispatch(request, *args, **kwargs)
+
 
 # @user_passes_test(lambda u: u.is_superuser,login_url='/')
 # def admin_users_update(request, user_id):
@@ -116,24 +117,24 @@ class UserUpdateView(UpdateView):
 # DELETE
 
 class UserDeleteView(DeleteView):
-   model = User
-   template_name = 'admin-users-update-delete.html'
-   success_url = reverse_lazy('admin_staff:admin_users')
+    model = User
+    template_name = 'admin-users-update-delete.html'
+    success_url = reverse_lazy('admin_staff:admin_users')
 
-   def delete(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.is_active = False
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-   def get_context_data(self, **kwargs):
-       context = super(UserDeleteView, self).get_context_data(**kwargs)
-       context['title'] = 'GeekShop - Редактирование пользователя'
-       return context
+    def get_context_data(self, **kwargs):
+        context = super(UserDeleteView, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Редактирование пользователя'
+        return context
 
-   @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
-   def dispatch(self, request, *args, **kwargs):
-        return  super(UserDeleteView, self).dispatch(request, *args, **kwargs)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserDeleteView, self).dispatch(request, *args, **kwargs)
 
 # @user_passes_test(lambda u: u.is_superuser,login_url='/')
 # def admin_users_delete(request,user_id):
@@ -144,4 +145,3 @@ class UserDeleteView(DeleteView):
 #         user.is_active = True
 #     user.save()
 #     return HttpResponseRedirect(reverse('admin_staff:admin_users'))
-

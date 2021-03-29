@@ -127,13 +127,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 AUTH_USER_MODEL = 'authapp.User'
 LOGIN_URL = '/auth/login/'
 
-DOMAIN_NAME = 'http://localhost:8000'
+# DOMAIN_NAME = 'http://localhost:8000'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '4eb7bb45fc6c84'
-EMAIL_HOST_PASSWORD = 'd0a8cf39457035'
-EMAIL_PORT = '2525'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'metalsochi@yandex.ru'
+EMAIL_HOST_PASSWORD = 'Isponec111'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
 
 
+
+LOGIN_REDIRECT_URL = "/"
