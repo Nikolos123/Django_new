@@ -60,12 +60,12 @@
                                     <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
                                         <i class="fab fa-vk"></i></a>
                                     </a>
-                                    <a href="#">
+                                    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/">
                                         <i class="fab fa-google"></i>
                                     </a>
-                                     <a href="#">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
+{#                                     <a href="{% url 'social:begin' 'facebook-oauth2' %}">#}
+{#                                        <i class="fab fa-facebook-f"></i>#}
+{#                                    </a>#}
                                 </div>
                             </div>
                         </div>

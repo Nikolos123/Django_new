@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 from mainapp.views import index
 
+
 # from mainapp.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('baskets/', include('basketapp.urls', namespace='baskets')),
     path('admin-staff/', include('adminapp.urls', namespace='admin_staff')),
     path('', include('social_django.urls', namespace='social')),
+
 ]
 
 if settings.DEBUG:

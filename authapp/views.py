@@ -130,6 +130,15 @@ def new_logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+def privacy_policy(reauest):
+    context = {
+
+             'title': 'Privacy policy',
+ }
+
+    return render(reauest, 'authapp/privacy-policy.html',context)
+
+
 
 class ProfileFormView(FormView):
     template_name = 'authapp/profile.html'

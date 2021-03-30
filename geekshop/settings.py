@@ -46,15 +46,30 @@ INSTALLED_APPS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.apple.AppleIdAuth',
 )
 # Загружаем секреты из файла
-with open('geekshop/vk.json', 'r') as f:
-    VK = json.load(f)
+SOCIAL_SECRETS_FILE = "geekshop/social_auth.json"
+SOCIAL = {}
+if os.path.exists(SOCIAL_SECRETS_FILE):
+    with open(SOCIAL_SECRETS_FILE,'r')as f:
+        SOCIAL = json.load(f)
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = VK['SOCIAL_AUTH_VK_OAUTH2_KEY']
-SOCIAL_AUTH_VK_OAUTH2_SECRET = VK['SOCIAL_AUTH_VK_OAUTH2_SECRET']
+SOCIAL_AUTH_VK_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_VK_OAUTH2_KEY',"")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_VK_OAUTH2_SECRET',"")
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',"")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',"")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY',"")
+SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET',"")
+SOCIAL_AUTH_FACEBOOK_OAUTH2_SCOPE = ['email']
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
