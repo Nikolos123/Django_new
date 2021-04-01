@@ -4,3 +4,4 @@ db.sqlite3
 venv
 media
 social_auth.json
+geekshop/auto.json

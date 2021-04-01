@@ -1,19 +1,22 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
 from django.contrib import auth
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from authapp.forms import UserRegisterForm, UserLoginForm, UserProfileForm
 from django.contrib import messages
 from authapp.models import User
 from basketapp.models import Basket
 from django.contrib.auth.decorators import login_required
-
+from django.db import transaction
+from authapp.forms import UserProfileEditForm
 from django.views.generic.list import ListView
+from .models import UserProfile
 
 # FBV  = Function-Based-Views
 # CBC  = Class-Based-Views
@@ -56,7 +59,7 @@ class RegisterListView(FormView):
     template_name = 'authapp/register.html'
     form_class = UserRegisterForm
     # success_message = 'Вы успешно зарегистрировались!'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('auth:login')
 
     def get_context_data(self, **kwargs):
         context = super(RegisterListView, self).get_context_data(**kwargs)
@@ -89,11 +92,12 @@ class RegisterListView(FormView):
     def verify(self, email, activation_key):
         try:
             user = User.objects.get(email=email)
+            a = user.is_activation_key_expires()
             if user.activation_key == activation_key and not user.is_activation_key_expires():
                 user.is_active = True
                 user.save()
                 auth.login(self, user)
-                return render(self, 'mainapp/index.html')
+                return render(self, 'authapp/verification.html')
             else:
                 print(f'error activation user: {user}')
                 return render(self, 'authapp/verification.html')
@@ -125,35 +129,59 @@ class RegisterListView(FormView):
 #     }
 #     return render(request, 'authapp/register.html', context)
 
+class Logout(LogoutView):
+    template_name = "mainapp/index.html"
 
-def new_logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+# def new_logout(request):
+#     auth.logout(request)
+#     return HttpResponseRedirect(reverse('index'))
 
 def privacy_policy(reauest):
     context = {
 
-             'title': 'Privacy policy',
- }
-
+        'title': 'Privacy policy',
+    }
     return render(reauest, 'authapp/privacy-policy.html',context)
 
 
 
-class ProfileFormView(FormView):
-    template_name = 'authapp/profile.html'
+class ProfileFormView(LoginRequiredMixin,UpdateView):
+    model = UserProfile
     form_class = UserProfileForm
+    template_name = 'authapp/profile.html'
+    form_class_second = UserProfileEditForm
     success_url = reverse_lazy('auth:profile')
 
     def get_context_data(self, **kwargs):
+
         context = super(ProfileFormView, self).get_context_data(**kwargs)
         context['title'] = 'GeekShop - Профиль'
+        context['profile_form'] = self.form_class_second(instance=self.request.user.userprofile)
         context['baskets'] = Basket.objects.filter(user=self.request.user)
         return context
+
+    def get_object(self):
+        return get_object_or_404(User, pk=self.request.user.pk)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(ProfileFormView, self).dispatch(request, *args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(pk=self.request.user.pk)
+        edit_form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
+        profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=user.userprofile)
+
+        if edit_form.is_valid() and profile_form.is_valid():
+            edit_form.save()
+            user.userprofile.save()
+            return HttpResponseRedirect(self.success_url)
+
+        return render(request, self.template_name, {
+            'form': edit_form,
+            'profile_form': profile_form,
+        })
 
 # @login_required
 # def profile(request):
@@ -170,3 +198,11 @@ class ProfileFormView(FormView):
 #         'title': 'GeekShop - Профиль',
 #         'baskets': Basket.objects.filter(user=request.user), }
 #     return render(request, 'authapp/profile.html', context)
+
+# @transaction.atomic
+# def edit(request):
+#     context = {
+#         'title' : 'Редактирование'
+#     }
+#     if request.method == 'POST':
+#         edit
