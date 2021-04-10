@@ -6,6 +6,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from authapp.models import User
 from adminapp.forms import UserAdminRegistrationForm, UserAdminProfileForim
+from mainapp.models import Product,ProductCategory
+from mainapp.forms import ProductProfileForm
 
 
 # FBV  = Function-Based-Views
@@ -145,3 +147,37 @@ class UserDeleteView(DeleteView):
 #         user.is_active = True
 #     user.save()
 #     return HttpResponseRedirect(reverse('admin_staff:admin_users'))
+
+#Products
+
+# READ
+class ProductsListView(ListView):
+    model = Product
+    template_name = 'admin-products-read.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Products'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductsListView, self).dispatch(request, *args, **kwargs)
+
+
+#UPDATE
+class ProductsUpdateView(UpdateView):
+    model = Product
+    template_name = 'admin-products-update-delete.html'
+    form_class = ProductProfileForm
+    # form_class = UserAdminProfileForm
+    success_url = reverse_lazy('adminapp:admin_products')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Редактирование  продуктов'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductsUpdateView, self).dispatch(request, *args, **kwargs)

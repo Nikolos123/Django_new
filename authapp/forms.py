@@ -73,4 +73,4 @@ class UserProfileEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)
         for fild_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
+            field.widget.attrs['class'] = 'form-control'
