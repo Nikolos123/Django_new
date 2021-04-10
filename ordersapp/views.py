@@ -126,6 +126,7 @@ class OrderDelete(DeleteView):
 
 class OrderRead(DetailView):
     model = Order
+    template_name = 'ordersapp/order_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(OrderRead, self).get_context_data(**kwargs)
