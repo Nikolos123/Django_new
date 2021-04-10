@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 from django.forms import inlineformset_factory
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DeleteView, DetailView
 
 from .models import Order, OrderItem
 from .forms import OrderFormItem
@@ -78,3 +79,27 @@ class OrderItemsCreat(CreateView):
             self.object.delete()
 
         return super(OrderItemsCreat, self).form_valid(form)
+
+
+class OrderDelete(DeleteView):
+    model = Order
+    success_url = reverse_lazy('orders:order_list')
+
+
+
+class OrderRead(DetailView):
+    model = Order
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderRead, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Просмотр заказа'
+        return  context
+
+
+
+def order_forming_complete(request,pl):
+    order = get_object_or_404(Order,pk=pk)
+    order.status = Order.SENT_TO_PROCEED
+    order.save()
+
+    return HttpResponseRedirect(reverse('orders:order_list'))
