@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView
 
 from .models import Order, OrderItem
 from .forms import OrderFormItem
@@ -28,6 +29,42 @@ class OrderList(ListView):
     # @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
     # def dispatch(self, request, *args, **kwargs):
     #     return super(OrderList, self).dispatch(request, *args, **kwargs)
+
+class OrderUpdate(LoginRequiredMixin, UpdateView):
+    model = Order
+    fields = []
+    context_object_name = 'object'
+    success_url = reverse_lazy('orders:order_list')
+
+    def get_context_data(self, **kwargs):
+           data = super(OrderUpdate, self).get_context_data(**kwargs)
+           OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=1)
+
+           if self.request.POST:
+               formset = OrderFormSet(self.request.POST, instance=self.object)
+           else:
+               formset = OrderFormSet(instance=self.object)
+
+           data['orderitems'] = formset
+
+           return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context['orderitems']
+
+        with transaction.atomic():
+            form.instance.user = self.request.user
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+        # удаляем пустой заказ
+        if self.object.get_total_cost() == 0:
+            self.object.delete()
+
+        return super(OrderUpdate, self).form_valid(form)
 
 
 class OrderItemsCreat(CreateView):
@@ -97,7 +134,7 @@ class OrderRead(DetailView):
 
 
 
-def order_forming_complete(request,pl):
+def order_forming_complete(request,pk):
     order = get_object_or_404(Order,pk=pk)
     order.status = Order.SENT_TO_PROCEED
     order.save()

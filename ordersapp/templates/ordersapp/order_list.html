@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     {% if item.status == 'FM' %}
-                                        <a href="{#% url 'ordersapp:order_update' item.pk %#}" class="btn btn-primary">
+                                        <a href="{% url 'orders:order_update' item.pk %}" class="btn btn-primary">
                                             редактировать
                                         </a>
                                     {% endif %}
