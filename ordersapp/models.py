@@ -71,3 +71,6 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = 'элемент заказа'
         verbose_name_plural = 'элементы заказа'
+
+    # def delete(self):
+    #     self.product.quantity+=self.q
