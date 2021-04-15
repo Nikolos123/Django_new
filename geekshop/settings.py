@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +24,7 @@ SECRET_KEY = 'm0y-s2nhj(*ba33vbhlgg#b10i4uv0$qd*^-07(bw*f&voxtdw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['127.0.0.1','127.0.0.1:8000']
 
 # Application definition
 
@@ -40,8 +40,43 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
+    'social_django'
 
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.apple.AppleIdAuth',
+)
+# Загружаем секреты из файла
+SOCIAL_SECRETS_FILE = "geekshop/social_auth.json"
+SOCIAL = {}
+if os.path.exists(SOCIAL_SECRETS_FILE):
+    with open(SOCIAL_SECRETS_FILE, 'r')as f:
+        SOCIAL = json.load(f)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_VK_OAUTH2_KEY', "")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_VK_OAUTH2_SECRET', "")
+# SOCIAL_AITH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', "")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', "")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY', "")
+SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET', "")
+SOCIAL_AUTH_FACEBOOK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_GITHUB_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_GITHUB_OAUTH2_KEY', "")
+SOCIAL_AUTH_GITHUB_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_GITHUB_OAUTH2_SECRET', "")
+SOCIAL_AUTH_GITHUB_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +86,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'geekshop.urls'
@@ -66,6 +103,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # Добавил эту строку
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -78,6 +117,12 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'Название вашей базы данных',
+        # 'USER': 'Ваш пользователь БД',
+        # 'PASSWORD': 'Ваше пароль',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -126,3 +171,33 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 
 AUTH_USER_MODEL = 'authapp.User'
 LOGIN_URL = '/auth/login/'
+
+DOMAIN_NAME = 'http://localhost:8000'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+LOGIN_PASSWOR_HOST = "geekshop/auto.json"
+LOGIN_PASSWOR = {}
+if os.path.exists(LOGIN_PASSWOR_HOST):
+    with open(LOGIN_PASSWOR_HOST, 'r')as f:
+        LOGIN_PASSWOR = json.load(f)
+
+EMAIL_HOST = LOGIN_PASSWOR.get('EMAIL_HOST', '')
+EMAIL_HOST_USER = LOGIN_PASSWOR.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = LOGIN_PASSWOR.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = LOGIN_PASSWOR.get('EMAIL_PORT', '')
+EMAIL_USE_TLS = LOGIN_PASSWOR.get('EMAIL_USE_TLS', '')
+
+LOGIN_REDIRECT_URL = "/"
+LOGIN_ERROR_URL = "/"
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.create_user',
+    'authapp.pipelines.save_user_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)

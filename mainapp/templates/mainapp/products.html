@@ -16,7 +16,7 @@
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
                     {% for i in menu %}
-                        <a href="#" class="list-group-item">{{ i.name }}</a>
+                        <a href="{% url 'mainapp:product' i.id %}" class="list-group-item">{{ i.name }}</a>
                     {% endfor %}
                     <!--                <a href="#" class="list-group-item">Новинки</a>-->
                     <!--                <a href="#" class="list-group-item">Одежда</a>-->
@@ -70,8 +70,8 @@
                             <div class="card h-100">
                                 <a href="#">
                                     <img class="card-img-top"
-                                           src="/media/{{ i.image }}"
-{#                                         src="{% static 'vendor/img/products/'|add:i.way %}"#}
+                                         src="/media/{{ i.image }}"
+                                            {#                                         src="{% static 'vendor/img/products/'|add:i.way %}"#}
                                          alt="">
                                 </a>
                                 <div class="card-body">
@@ -81,28 +81,34 @@
                                     <h5>{{ i.price }} руб </h5>
                                     <p class="card-text">{{ i.short_description }}</p>
                                 </div>
-{#                                {% if i.status_buy == 'Отправить в корзину' %}#}
                                 <div class="card-footer text-center">
                                     <a href="{% url 'baskets:basket_add' i.id %}">
-                                        <button type="button" class="btn btn-outline-success">Отправить в корзину</button></a>
+                                        <button type="button" class="btn btn-outline-success">Отправить в корзину
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
 
                 </div>
-
-
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+
+                        <li class="page-item {% if not product.has_previous %} disabled {% endif %}">
+                            <a class="page-link"
+                               href="{% if product.has_previous %} {% url 'products:page' product.previous_page_number %} {% else %} # {% endif %}"
+                               tabindex="-1" aria-disabled="true">Previous</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                        {% for page in product.paginator.page_range %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'products:page' page %}">{{ page }}</a></li>
+                        {% endfor %}
+
+                        <li class="page-item {% if not product.has_next %} disable {% endif %}">
+                            <a class="page-link"
+                               href=" {% if product.has_next %} {% url 'products:page' product.next_page_number %} {% else %} # {% endif %}"
+                            >Next</a>
                         </li>
                     </ul>
                 </nav>
