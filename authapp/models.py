@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.utils.timezone import now
-
+from datetime import  date
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
@@ -37,11 +37,11 @@ class UserProfile(models.Model):
 
     about_me = models.TextField(verbose_name='о себе',max_length=512,blank=True)
 
-    gender = models.CharField(verbose_name='пол',choices=GENDER_CHOICES,blank=True,max_length=128)
+    gender = models.CharField(verbose_name='пол',choices=GENDER_CHOICES,blank=True,max_length=128,default='M')
 
-    langs = models.CharField(verbose_name='Язык', max_length=128, blank=True)
+    langs = models.CharField(verbose_name='Язык', max_length=128, blank=True,default='EN')
 
-    age_form = models.DateField(verbose_name='возраст', blank=True,default='20000101')
+    age_form = models.DateField(verbose_name='возраст', blank=True,default=date(2000,1,1))
 
     @receiver(post_save,sender=User)
     def create_user_profile(sender,instance,created,**kwargs):

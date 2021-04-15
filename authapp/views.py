@@ -56,6 +56,7 @@ class LoginListView(LoginView):
 #     return render(request, 'authapp/login.html', context)
 
 class RegisterListView(FormView):
+    model = User
     template_name = 'authapp/register.html'
     form_class = UserRegisterForm
     # success_message = 'Вы успешно зарегистрировались!'
@@ -92,11 +93,10 @@ class RegisterListView(FormView):
     def verify(self, email, activation_key):
         try:
             user = User.objects.get(email=email)
-            a = user.is_activation_key_expires()
             if user.activation_key == activation_key and not user.is_activation_key_expires():
                 user.is_active = True
                 user.save()
-                auth.login(self, user)
+                auth.login(self, user,backend='django.contrib.auth.backends.ModelBackend')
                 return render(self, 'authapp/verification.html')
             else:
                 print(f'error activation user: {user}')

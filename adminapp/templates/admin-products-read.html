@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block container_main %}
+    <main>
+        <div class="container-fluid">
+            <h1 class="mt-4">Продукты</h1>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table mr-1"></i>
+                    Продукты
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Цена</th>
+                                <th>Количество</th>
+                                <th>Категория</th>
+                                <th>Активный</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Цена</th>
+                                <th>Количество</th>
+                                <th>Категория</th>
+                                <th>Активный</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            {% for products in object_list %}
+                                <tr>
+                                    <td><a href="{% url 'admin_staff:admin_products_update' products.id %}" style="color: dodgerblue">{{ products.name }}</a></td>
+                                    <td>{{ products.price }}</td>
+                                    <td>{{ products.quantity }}</td>
+                                    <td>{{ products.category }}</td>
+{#                                    <td class="text-center">#}
+{#                                        {% if products.if_staff %}#}
+{#                                            <i class="fas fa-check-circle"></i>#}
+{#                                        {% else %}#}
+{#                                            <i class="fas fa-times-circle"></i>#}
+{#                                        {% endif %}#}
+{#                                    </td>#}
+
+                                    <td class="text-center">
+                                        {% if products.active %}
+                                            <i class="fas fa-check-circle"></i>
+                                        {% else %}
+                                            <i class="fas fa-times-circle"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            {#                            <tr>#}
+                            {#                                <td><a href="admin-users-update-delete.html" style="color: dodgerblue">valeriy</a></td>#}
+                            {#                                <td>Valeriy</td>#}
+                            {#                                <td>Pavlikov</td>#}
+                            {#                                <td>valerypavlikov@yandex.ru</td>#}
+                            {#                                <td class="text-center"><i class="fas fa-times-circle"></i></td>#}
+                            {#                                <td class="text-center"><i class="fas fa-times-circle"></i></td>#}
+                            {#                            </tr>#}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'admin_staff:admin_users_create' %}">
+                        <button class="btn btn-success">Создать Продукт</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

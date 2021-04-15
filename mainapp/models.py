@@ -21,7 +21,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products_images', blank=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)  # PROTECT
     status_buy = models.CharField(max_length=64, default='Отправить в корзину')
-
+    active = models.BooleanField(verbose_name='активный',default=True)
     #
     # def __str__(self):
     #     return f'{self.name} | {self.category.name}'
