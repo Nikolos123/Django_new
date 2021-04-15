@@ -135,12 +135,17 @@ if os.path.exists(DATABESE_SECRETS_FILE):
     with open(DATABESE_SECRETS_FILE, 'r')as f:
         DATABESE = json.load(f)
 
+# ENGINE_POST
+# NAME_POST
+# USER_POST
 DATABASES = {
     'default': {
-
-        'ENGINE': DATABESE.get('ENGINE', ""),
-        'NAME': DATABESE.get('NAME', ""),
-        'USER': DATABESE.get('USER', "")
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'geekshop',
+        'USER': 'postgres'
+        # 'ENGINE': DATABESE.get('ENGINE', ""),
+        # 'NAME': DATABESE.get('NAME', ""),
+        # 'USER': DATABESE.get('USER', "")
     }
 }
 
