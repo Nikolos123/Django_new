@@ -36,7 +36,9 @@
 
             </div>
         </div>
+         <a href="{% url 'orders:order_create' %}">
         <button type="button" class="btn btn-success btn-lg float-right">Оформить</button>
+         </a>
     {% else %}
         <h4 class="mt-3 mb-3 text-center">
             Корзина пуста
