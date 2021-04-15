@@ -138,9 +138,6 @@ if os.path.exists(DATABESE_SECRETS_FILE):
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'geekshop',
-        # 'USER': 'postgres'
         'ENGINE': DATABESE.get('ENGINE', ""),
         'NAME': DATABESE.get('NAME', ""),
         'USER': DATABESE.get('USER', "")
