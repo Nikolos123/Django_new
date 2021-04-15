@@ -2,6 +2,6 @@
 __pycache__
 db.sqlite3
 venv
-media
 geekshop/social_auth.json
 geekshop/auto.json
+geekshop/database.json
