@@ -136,16 +136,16 @@ if os.path.exists(DATABESE_SECRETS_FILE):
         DATABESE = json.load(f)
 
 
-# DATABASES = {
-#     'default': {
-#         # 'ENGINE': 'django.db.backends.postgresql',
-#         # 'NAME': 'geekshop',
-#         # 'USER': 'postgres'
-#         'ENGINE': DATABESE.get('ENGINE', ""),
-#         'NAME': DATABESE.get('NAME', ""),
-#         'USER': DATABESE.get('USER', "")
-#     }
-# }
+DATABASES = {
+    'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'geekshop',
+        # 'USER': 'postgres'
+        'ENGINE': DATABESE.get('ENGINE', ""),
+        'NAME': DATABESE.get('NAME', ""),
+        'USER': DATABESE.get('USER', "")
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
