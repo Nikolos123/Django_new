@@ -116,18 +116,18 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         # 'ENGINE': 'django.db.backends.mysql',
-#         # 'NAME': 'Название вашей базы данных',
-#         # 'USER': 'Ваш пользователь БД',
-#         # 'PASSWORD': 'Ваше пароль',
-#         # 'HOST': 'localhost',
-#         # 'PORT': '3306',
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'Название вашей базы данных',
+        # 'USER': 'Ваш пользователь БД',
+        # 'PASSWORD': 'Ваше пароль',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 DATABESE_SECRETS_FILE = "geekshop/database.json"
 DATABESE = {}
@@ -135,19 +135,17 @@ if os.path.exists(DATABESE_SECRETS_FILE):
     with open(DATABESE_SECRETS_FILE, 'r')as f:
         DATABESE = json.load(f)
 
-# ENGINE_POST
-# NAME_POST
-# USER_POST
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'geekshop',
-        'USER': 'postgres'
-        # 'ENGINE': DATABESE.get('ENGINE', ""),
-        # 'NAME': DATABESE.get('NAME', ""),
-        # 'USER': DATABESE.get('USER', "")
-    }
-}
+
+# DATABASES = {
+#     'default': {
+#         # 'ENGINE': 'django.db.backends.postgresql',
+#         # 'NAME': 'geekshop',
+#         # 'USER': 'postgres'
+#         'ENGINE': DATABESE.get('ENGINE', ""),
+#         'NAME': DATABESE.get('NAME', ""),
+#         'USER': DATABESE.get('USER', "")
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
