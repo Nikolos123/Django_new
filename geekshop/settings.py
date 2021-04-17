@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'template_profiler_panel',
+    'django_extensions'
 
 ]
 
@@ -136,11 +137,24 @@ if os.path.exists(DATABESE_SECRETS_FILE):
 
 DATABASES = {
     'default': {
-        'ENGINE': DATABESE.get('ENGINE', ""),
-        'NAME': DATABESE.get('NAME', ""),
-        'USER': DATABESE.get('USER', "")
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABESE_SECRETS_FILE = "geekshop/database.json"
+# DATABESE = {}
+# if os.path.exists(DATABESE_SECRETS_FILE):
+#     with open(DATABESE_SECRETS_FILE, 'r')as f:
+#         DATABESE = json.load(f)
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': DATABESE.get('ENGINE', ""),
+#         'NAME': DATABESE.get('NAME', ""),
+#         'USER': DATABESE.get('USER', "")
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
