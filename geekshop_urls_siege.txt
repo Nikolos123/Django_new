@@ -1,0 +1,11 @@
+http://89.108.99.5/
+http://89.108.99.5/products/
+http://89.108.99.5/contact/
+http://89.108.99.5/products/category/1/
+http://89.108.99.5/products/category/2/
+http://89.108.99.5/products/category/3/
+http://89.108.99.5/products/category/4/
+http://89.108.99.5/basket/
+http://89.108.99.5/order/
+http://89.108.99.5/auth/edit/
+http://89.108.99.5/order/update/2
