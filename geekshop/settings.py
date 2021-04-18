@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm0y-s2nhj(*ba33vbhlgg#b10i4uv0$qd*^-07(bw*f&voxtdw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'template_profiler_panel',
-    'django_extensions'
+
 
 ]
 
@@ -129,11 +129,7 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 #     }
 # }
 
-DATABESE_SECRETS_FILE = "geekshop/database.json"
-DATABESE = {}
-if os.path.exists(DATABESE_SECRETS_FILE):
-    with open(DATABESE_SECRETS_FILE, 'r')as f:
-        DATABESE = json.load(f)
+
 
 # DATABASES = {
 #     'default': {
