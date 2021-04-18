@@ -26,3 +26,4 @@ django-debug-toolbar-template-profiler
 django_extensions
 pydotplus
 siege
+python-memcached

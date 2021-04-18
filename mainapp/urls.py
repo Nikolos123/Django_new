@@ -4,6 +4,7 @@ from mainapp.views import products
 app_name = 'mainapp'
 
 urlpatterns = [
+    # path('ajax/', ProductList)
     path('', products, name='index'),
     path('<int:category_id>/', products, name='product'),
     path('page/<int:page>/', products, name='page'),
