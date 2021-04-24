@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from authapp.models import User
 from adminapp.forms import UserAdminRegistrationForm, UserAdminProfileForim
 from mainapp.models import Product,ProductCategory
-from mainapp.forms import ProductProfileForm
+from mainapp.forms import ProductProfileForm,CategoryProfileForm
 
 
 # FBV  = Function-Based-Views
@@ -151,6 +151,8 @@ class UserDeleteView(DeleteView):
 #Products
 
 # READ
+
+#READ
 class ProductsListView(ListView):
     model = Product
     template_name = 'admin-products-read.html'
@@ -164,6 +166,36 @@ class ProductsListView(ListView):
     def dispatch(self, request, *args, **kwargs):
         return super(ProductsListView, self).dispatch(request, *args, **kwargs)
 
+
+class CategoryListView(ListView):
+    model = ProductCategory
+    template_name = 'admin-category-read.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Category'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryListView, self).dispatch(request, *args, **kwargs)
+
+
+class CategoryUpdateView(UpdateView):
+    model = ProductCategory
+    template_name = 'admin-category-update-delete.html'
+    form_class = CategoryProfileForm
+    # form_class = UserAdminProfileForm
+    success_url = reverse_lazy('adminapp:admin_category')
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'GeekShop - Редактирование  категорий'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryUpdateView, self).dispatch(request, *args, **kwargs)
 
 #UPDATE
 class ProductsUpdateView(UpdateView):

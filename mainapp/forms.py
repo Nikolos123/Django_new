@@ -14,3 +14,15 @@ class ProductProfileForm(forms.ModelForm):
         for fild_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class CategoryProfileForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ('name' , 'description', 'active')
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryProfileForm, self).__init__(*args, **kwargs)
+        for fild_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
