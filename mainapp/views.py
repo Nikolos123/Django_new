@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 from django.http import JsonResponse
+from django.views.generic import DetailView, ListView
 
 from mainapp.models import  ProductCategory,Product
 
@@ -39,6 +40,44 @@ def products(request,category_id=None,page=1):
     context.update({'product':products_paginator})
     return render(request, 'mainapp/products.html', context)
 
+# class ProductListByCategory(ListView):
+#     """
+#     Контроллер вывода списка товаров
+#     """
+#     model = Product
+#     template_name = 'mainapp/products.html'
+#     context_object_name = 'products'
+#
+#     def get_context_data(self, category_id=None, *args, **kwargs):
+#         """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+#
+#         context = super().get_context_data()
+#         context['categories'] = ProductCategory.objects.all()
+#
+#         if self.kwargs.get('category_id'):
+#             category_id = int(self.kwargs.get('category_id'))
+#             products = Product.objects.filter(category_id=category_id).order_by('-price')
+#         else:
+#             products = Product.objects.all().order_by('-price')
+#         context['products'] = products
+#
+#         return context
+
+
+class ProductDetail(DetailView):
+    """
+    Контроллер вывода информации о продукте
+    """
+    model = Product
+    template_name = 'mainapp/products_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+
+        context = super().get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
 
 # def products_ajax(request, pk=None, page=1):
