@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 from authapp.models import User
 from mainapp.models import Product
-
+from django.utils.functional import cached_property
 
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
